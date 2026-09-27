@@ -2,7 +2,6 @@
 using InventoryManagement.Service.Interface;
 using InventoryManagement.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace InventoryManagement.Service
 {
