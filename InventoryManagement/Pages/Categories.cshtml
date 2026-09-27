@@ -1,0 +1,29 @@
+@page
+@model InventoryManagement.Pages.CategoriesModel
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="container mt-4">
+    <h2>Categories</h2>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input id="categoryName" class="form-control" placeholder="Category name" />
+        </div>
+        <div class="col-md-2">
+            <button id="addCategory" class="btn btn-success">Add</button>
+        </div>
+        <div class="col-md-4 d-flex">
+            <input id="categorySearch" class="form-control me-2" placeholder="Search..." />
+            <button id="searchCategories" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+
+    <div id="categoriesMsg"></div>
+    <div id="categoriesTable"></div>
+</div>
+
+@section Scripts {
+    <script src="~/js/categories.js"></script>
+}

@@ -1,0 +1,44 @@
+@page
+@model InventoryManagement.Pages.MutationsModel
+@{
+    ViewData["Title"] = "Mutations";
+}
+
+<div class="container mt-4">
+    <h2>Good Mutations</h2>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <input id="mutationGoodId" type="number" class="form-control" placeholder="Good ID" />
+        </div>
+        <div class="col-md-3">
+            <select id="mutationType" class="form-select">
+                <option value="INBOUND">IN</option>
+                <option value="OUTBOUND">OUT</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input id="mutationAmount" type="number" class="form-control" placeholder="Amount" />
+        </div>
+        <div class="col-md-4 d-flex">
+            <button id="doMutation" class="btn btn-success">Mutate</button>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-8 d-flex">
+            <input id="mutSearch" class="form-control me-2" placeholder="Search history..." />
+            <button id="searchMutations" class="btn btn-primary">Search</button>
+        </div>
+        <div class="col-md-4 text-end">
+            <button id="refreshMutations" class="btn btn-secondary">Refresh</button>
+        </div>
+    </div>
+
+    <div id="mutationsMsg"></div>
+    <div id="mutationsTable"></div>
+</div>
+
+@section Scripts {
+    <script src="~/js/mutations.js"></script>
+}

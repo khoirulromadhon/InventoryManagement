@@ -1,0 +1,29 @@
+@page
+@model InventoryManagement.Pages.SuppliersModel
+@{
+    ViewData["Title"] = "Suppliers";
+}
+
+<div class="container mt-4">
+    <h2>Suppliers</h2>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input id="supplierName" class="form-control" placeholder="Supplier name" />
+        </div>
+        <div class="col-md-2">
+            <button id="addSupplier" class="btn btn-success">Add</button>
+        </div>
+        <div class="col-md-4 d-flex">
+            <input id="supplierSearch" class="form-control me-2" placeholder="Search..." />
+            <button id="searchSuppliers" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+
+    <div id="suppliersMsg"></div>
+    <div id="suppliersTable"></div>
+</div>
+
+@section Scripts {
+    <script src="~/js/suppliers.js"></script>
+}

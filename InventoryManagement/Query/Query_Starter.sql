@@ -142,4 +142,4 @@ BEGIN
     ORDER BY gm.mutation_id ASC;
 END;
 
-exec GetMutation;
+SELECT COUNT(*) FROM good_mutation;
