@@ -84,7 +84,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<GoodMutation>(entity =>
         {
-            entity.HasKey(e => e.MutationId).HasName("PK__good_mut__8CB62A6F70F8FBA2");
+            entity.HasKey(e => e.MutationId).HasName("PK__good_mut__8CB62A6F2CDC21ED");
 
             entity.ToTable("good_mutation");
 
@@ -92,6 +92,7 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.MutationId).HasColumnName("mutation_id");
             entity.Property(e => e.Amount).HasColumnName("amount");
+            entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.GoodId).HasColumnName("good_id");
             entity.Property(e => e.MutationDate)
                 .HasColumnType("datetime")
@@ -99,11 +100,22 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Status)
                 .HasMaxLength(10)
                 .HasColumnName("status");
+            entity.Property(e => e.SupplierId).HasColumnName("supplier_id");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.GoodMutations)
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_category_good_mutation");
 
             entity.HasOne(d => d.Good).WithMany(p => p.GoodMutations)
                 .HasForeignKey(d => d.GoodId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_good");
+
+            entity.HasOne(d => d.Supplier).WithMany(p => p.GoodMutations)
+                .HasForeignKey(d => d.SupplierId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_supplier_good_mutation");
         });
 
         modelBuilder.Entity<Supplier>(entity =>

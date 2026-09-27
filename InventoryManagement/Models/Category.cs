@@ -11,5 +11,7 @@ public partial class Category
 
     public bool? IsDelete { get; set; }
 
+    public virtual ICollection<GoodMutation> GoodMutations { get; set; } = new List<GoodMutation>();
+
     public virtual ICollection<Good> Goods { get; set; } = new List<Good>();
 }

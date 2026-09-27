@@ -15,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IGoodService, GoodService>();
+builder.Services.AddScoped<IGoodMutationService, GoodMutationService>();
 
 var app = builder.Build();
 

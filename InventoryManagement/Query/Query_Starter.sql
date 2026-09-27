@@ -24,10 +24,14 @@ CREATE TABLE good (
 CREATE TABLE good_mutation (
 	mutation_id INT IDENTITY (1,1) PRIMARY KEY,
 	good_id INT NOT NULL,
+    category_id INT NOT NULL,
+    supplier_id INT NOT NULL,
 	mutation_date DATETIME,
 	status NVARCHAR(10) NOT NULL,
 	amount INT NOT NULL,
-	CONSTRAINT fk_good FOREIGN KEY (good_id) REFERENCES good(good_id)
+	CONSTRAINT fk_good FOREIGN KEY (good_id) REFERENCES good(good_id),
+    CONSTRAINT fk_category_good_mutation FOREIGN KEY (category_id) REFERENCES category(category_id),
+	CONSTRAINT fk_supplier_good_mutation FOREIGN KEY (supplier_id) REFERENCES supplier(supplier_id)
 );
 
 CREATE INDEX idx_category_name ON category (category_name);
@@ -115,12 +119,20 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT TOP 10
+        gm.mutation_id AS MutationId,
         gm.mutation_date AS MutationDate,
+        g.good_id AS GoodId,
         g.good_name AS GoodName,
+        c.category_id AS CategoryId,
+        c.category_name AS CategoryName,
+        s.supplier_id AS SupplierId,
+        s.supplier_name AS SupplierName,
         gm.status,
         gm.amount
     FROM good_mutation gm
     INNER JOIN good g ON g.good_id = gm.good_id
+    INNER JOIN category c ON c.category_id = gm.category_id
+    INNER JOIN supplier s ON s.supplier_id = gm.supplier_id
     WHERE gm.mutation_id > @CursorId
       AND (
             @Keyword IS NULL
@@ -129,3 +141,5 @@ BEGIN
           )
     ORDER BY gm.mutation_id ASC;
 END;
+
+exec GetMutation;
