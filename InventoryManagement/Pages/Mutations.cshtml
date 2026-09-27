@@ -8,20 +8,11 @@
     <h2>Good Mutations</h2>
 
     <div class="row mb-3">
-        <div class="col-md-3">
-            <input id="mutationGoodId" type="number" class="form-control" placeholder="Good ID" />
+        <div class="col-md-8 d-flex">
+            <button id="openMutationModal" class="btn btn-primary">New Mutation</button>
         </div>
-        <div class="col-md-3">
-            <select id="mutationType" class="form-select">
-                <option value="INBOUND">IN</option>
-                <option value="OUTBOUND">OUT</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <input id="mutationAmount" type="number" class="form-control" placeholder="Amount" />
-        </div>
-        <div class="col-md-4 d-flex">
-            <button id="doMutation" class="btn btn-success">Mutate</button>
+        <div class="col-md-4 text-end">
+            <button id="refreshMutations" class="btn btn-secondary">Refresh</button>
         </div>
     </div>
 
@@ -30,13 +21,53 @@
             <input id="mutSearch" class="form-control me-2" placeholder="Search history..." />
             <button id="searchMutations" class="btn btn-primary">Search</button>
         </div>
-        <div class="col-md-4 text-end">
-            <button id="refreshMutations" class="btn btn-secondary">Refresh</button>
-        </div>
+
     </div>
 
     <div id="mutationsMsg"></div>
     <div id="mutationsTable"></div>
+</div>
+
+<!-- Mutation Modal -->
+<div class="modal fade" id="mutationModal" tabindex="-1" aria-labelledby="mutationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mutationModalLabel">New Good Mutation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="mutationModalMsg"></div>
+        <div class="mb-3">
+          <label for="mutationGoodIdSelect" class="form-label">Good</label>
+          <select id="mutationGoodIdSelect" class="form-select"></select>
+        </div>
+        <div class="mb-3">
+          <label for="mutationCategoryIdSelect" class="form-label">Category</label>
+          <select id="mutationCategoryIdSelect" class="form-select"></select>
+        </div>
+        <div class="mb-3">
+          <label for="mutationSupplierIdSelect" class="form-label">Supplier</label>
+          <select id="mutationSupplierIdSelect" class="form-select"></select>
+        </div>
+        <div class="mb-3">
+          <label for="mutationTypeSelect" class="form-label">Type</label>
+          <select id="mutationTypeSelect" class="form-select">
+            <option value="INBOUND">INBOUND</option>
+            <option value="OUTBOUND">OUTBOUND</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="mutationAmountInput" class="form-label">Amount</label>
+          <input id="mutationAmountInput" type="number" class="form-control" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="saveMutation" class="btn btn-primary">Save Mutation</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 @section Scripts {

@@ -1,6 +1,9 @@
 $(function(){
     const apiMutate = '/api/GoodMutationAPI/Mutation';
     const apiHistory = '/api/GoodMutationAPI/MutationHistory';
+    const apiGoods = '/api/GoodAPI/GetAllGoods';
+    const apiCategories = '/api/CategoryAPI/GetAllCategories';
+    const apiSuppliers = '/api/SupplierAPI/GetAllSuppliers';
 
     function load(keyword){
         const url = apiHistory + (keyword ? `?keyword=${encodeURIComponent(keyword)}` : '');
@@ -18,31 +21,82 @@ $(function(){
         }
         let html = '<table class="table table-striped"><thead><tr><th>ID</th><th>Good</th><th>Type</th><th>Amount</th><th>Note</th><th>Date</th></tr></thead><tbody>';
         items.forEach(i => {
-            html += `<tr><td>${i.mutationId ?? ''}</td><td>${i.goodName ?? ''}</td><td>${i.status ?? ''}</td><td>${i.amount ?? ''}</td><td>${i.note ?? ''}</td><td>${i.mutationDate ?? ''}</td></tr>`;
+            html += `<tr><td>${i.mutationId ?? ''}</td><td>${i.goodName ?? ''}</td><td>${i.status ?? ''}</td><td>${i.amount ?? ''}</td><td>${i.mutationDate ?? ''}</td></tr>`;
         });
         html += '</tbody></table>';
         $('#mutationsTable').html(html);
     }
 
-    $('#doMutation').on('click', function(){
-        const goodId = parseInt($('#mutationGoodId').val());
-        const type = $('#mutationType').val();
-        const amount = parseInt($('#mutationAmount').val());
-        if(!goodId || !amount){
-            $('#mutationsMsg').html('<div class="alert alert-warning">Good and amount required</div>');
-            return;
+    function loadDropdowns(){
+        // Goods
+        $.getJSON(apiGoods + '?cursor=0').done(function(data){
+            const sel = $('#mutationGoodIdSelect');
+            sel.empty();
+            sel.append('<option value="">-- Select Good --</option>');
+            data.forEach(g => sel.append(`<option value="${g.goodId}">${g.goodName} (${g.goodCode})</option>`));
+        });
+
+        // Categories
+        $.getJSON(apiCategories + '?cursor=0').done(function(data){
+            const sel = $('#mutationCategoryIdSelect');
+            sel.empty();
+            sel.append('<option value="">-- Select Category --</option>');
+            data.forEach(c => sel.append(`<option value="${c.categoryId}">${c.categoryName}</option>`));
+        });
+
+        // Suppliers
+        $.getJSON(apiSuppliers + '?cursor=0').done(function(data){
+            const sel = $('#mutationSupplierIdSelect');
+            sel.empty();
+            sel.append('<option value="">-- Select Supplier --</option>');
+            data.forEach(s => sel.append(`<option value="${s.supplierId}">${s.supplierName}</option>`));
+        });
+    }
+
+    $('#openMutationModal').on('click', function(){
+        loadDropdowns();
+        $('#mutationModalMsg').html('');
+        $('#mutationAmountInput').val('');
+        var modal = new bootstrap.Modal(document.getElementById('mutationModal'));
+        modal.show();
+    });
+
+    $('#saveMutation').on('click', function(){
+        const goodId = parseInt($('#mutationGoodIdSelect').val());
+        const categoryId = parseInt($('#mutationCategoryIdSelect').val());
+        const supplierId = parseInt($('#mutationSupplierIdSelect').val());
+        const type = $('#mutationTypeSelect').val();
+        const amount = parseInt($('#mutationAmountInput').val());
+
+        if (type == 'INBOUND') {
+            if (!goodId || !categoryId || !supplierId || !amount) {
+                $('#mutationModalMsg').html('<div class="alert alert-warning">All fields required</div>');
+                return;
+            }
         }
+        else {
+            if (!goodId || !amount) {
+                $('#mutationModalMsg').html('<div class="alert alert-warning">All fields required</div>');
+                return;
+            }
+        }
+
         const payload = {
-            GoodId: goodId,
+            CategoryId: categoryId,
+            SupplierId: supplierId,
             Status: type,
             Amount: amount
         };
+
         $.ajax({ url: apiMutate, method: 'POST', contentType: 'application/json', data: JSON.stringify(payload) })
             .done(function(){
                 $('#mutationsMsg').html('<div class="alert alert-success">Mutation success</div>');
                 load();
+                var modalEl = document.getElementById('mutationModal');
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
             }).fail(function(){
-                $('#mutationsMsg').html('<div class="alert alert-danger">Mutation failed</div>');
+                $('#mutationModalMsg').html('<div class="alert alert-danger">Mutation failed</div>');
             });
     });
 
