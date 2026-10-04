@@ -29,9 +29,9 @@ $(function(){
             $('#goodsTable').html('<div class="alert alert-secondary">No goods</div>');
             return;
         }
-        let html = '<table class="table table-striped"><thead><tr><th>ID</th><th>Code</th><th>Name</th><th>Category</th><th>Supplier</th><th>Stock</th></tr></thead><tbody>';
+        let html = '<table class="table table-striped"><thead><tr><th>Code</th><th>Name</th><th>Category</th><th>Supplier</th><th>Stock</th></tr></thead><tbody>';
         items.forEach(i => {
-            html += `<tr><td>${i.goodId ?? ''}</td><td>${i.goodCode ?? ''}</td><td>${i.goodName ?? ''}</td><td>${i.categoryName ?? ''}</td><td>${i.supplierName ?? ''}</td><td>${i.goodStock ?? ''}</td></tr>`;
+            html += `<tr><td>${i.goodCode ?? ''}</td><td>${i.goodName ?? ''}</td><td>${i.categoryName ?? ''}</td><td>${i.supplierName ?? ''}</td><td>${i.goodStock ?? ''}</td></tr>`;
         });
         html += '</tbody></table>';
         $('#goodsTable').html(html);

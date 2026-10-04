@@ -31,9 +31,9 @@ $(function(){
             $('#categoriesTable').html('<div class="alert alert-secondary">No categories</div>');
             return;
         }
-        let html = '<table class="table table-striped"><thead><tr><th>ID</th><th>Name</th><th>Action</th></tr></thead><tbody>';
+        let html = '<table class="table table-striped"><thead><tr><th>Name</th><th>Action</th></tr></thead><tbody>';
         items.forEach(i => {
-            html += `<tr><td>${i.categoryId ?? ''}</td><td>${i.categoryName ?? ''}</td><td><button class="btn btn-sm btn-danger delete-cat" data-id="${i.categoryId}">Delete</button></td></tr>`;
+            html += `<tr><td>${i.categoryName ?? ''}</td><td><button class="btn btn-sm btn-danger delete-cat" data-id="${i.categoryId}">Delete</button></td></tr>`;
         });
         html += '</tbody></table>';
         $('#categoriesTable').html(html);

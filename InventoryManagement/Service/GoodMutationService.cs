@@ -26,7 +26,7 @@ namespace InventoryManagement.Service
                         x.SupplierId == vmGoodMutation.SupplierId
                     );
 
-                    Good goodName = await _context.Goods.FirstOrDefaultAsync(x => x.GoodId == vmGoodMutation.GoodId);
+                    //Good goodName = await _context.Goods.FirstOrDefaultAsync(x => x.GoodId == vmGoodMutation.GoodId);
                     Category category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == vmGoodMutation.CategoryId);
                     Supplier supplier = await _context.Suppliers.FirstOrDefaultAsync(s => s.SupplierId == vmGoodMutation.SupplierId);
 
@@ -58,7 +58,6 @@ namespace InventoryManagement.Service
                     else
                     {
                         string goodCode = "G" + 
-                            vmGoodMutation.GoodId.ToString() + 
                             vmGoodMutation.CategoryId.ToString() + 
                             vmGoodMutation.SupplierId.ToString() + 
                             category.CategoryName.Substring(0, 1);
@@ -68,15 +67,16 @@ namespace InventoryManagement.Service
                             CategoryId = vmGoodMutation.CategoryId,
                             SupplierId = vmGoodMutation.SupplierId,
                             GoodCode = goodCode,
-                            GoodName = goodName.GoodName,
+                            GoodName = vmGoodMutation.GoodName,
                             GoodStock = vmGoodMutation.Amount
                         };
 
                         _context.Goods.Add(good);
+                        await _context.SaveChangesAsync();
 
                         _context.GoodMutations.Add(new GoodMutation
                         {
-                            GoodId = vmGoodMutation.GoodId,
+                            GoodId = good.GoodId,
                             CategoryId = vmGoodMutation.CategoryId,
                             SupplierId = vmGoodMutation.SupplierId,
                             MutationDate = DateTime.Now,
@@ -87,7 +87,11 @@ namespace InventoryManagement.Service
                 }
                 else if (vmGoodMutation.Status.Equals("OUTBOUND"))
                 {
-                    Good existingGood = await _context.Goods.FirstOrDefaultAsync(x => x.GoodId == vmGoodMutation.GoodId);
+                    Good existingGood = await _context.Goods.FirstOrDefaultAsync(
+                        x => x.SupplierId == vmGoodMutation.SupplierId && 
+                        x.CategoryId == vmGoodMutation.CategoryId &&
+                        x.GoodName == vmGoodMutation.GoodName
+                    );
 
                     if (existingGood == null)
                     {
@@ -104,7 +108,7 @@ namespace InventoryManagement.Service
 
                         _context.GoodMutations.Add(new GoodMutation
                         {
-                            GoodId = vmGoodMutation.GoodId,
+                            GoodId = existingGood.GoodId,
                             CategoryId = existingGood.CategoryId,
                             SupplierId = existingGood.SupplierId,
                             MutationDate = DateTime.Now,

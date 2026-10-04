@@ -31,9 +31,9 @@ $(function(){
             $('#suppliersTable').html('<div class="alert alert-secondary">No suppliers</div>');
             return;
         }
-        let html = '<table class="table table-striped"><thead><tr><th>ID</th><th>Name</th><th>Action</th></tr></thead><tbody>';
+        let html = '<table class="table table-striped"><thead><tr><th>Name</th><th>Action</th></tr></thead><tbody>';
         items.forEach(i => {
-            html += `<tr><td>${i.supplierId ?? ''}</td><td>${i.supplierName ?? ''}</td><td><button class="btn btn-sm btn-danger delete-sup" data-id="${i.supplierId}">Delete</button></td></tr>`;
+            html += `<tr><td>${i.supplierName ?? ''}</td><td><button class="btn btn-sm btn-danger delete-sup" data-id="${i.supplierId}">Delete</button></td></tr>`;
         });
         html += '</tbody></table>';
         $('#suppliersTable').html(html);

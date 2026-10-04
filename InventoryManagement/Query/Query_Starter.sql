@@ -139,7 +139,7 @@ BEGIN
             OR @Keyword = ''
             OR CONVERT(DATE, gm.mutation_date) = TRY_CONVERT(DATE, @Keyword)
           )
-    ORDER BY gm.mutation_id ASC;
+    ORDER BY gm.mutation_date DESC;
 END;
 
-SELECT COUNT(*) FROM good_mutation;
+SELECT * FROM good_mutation;

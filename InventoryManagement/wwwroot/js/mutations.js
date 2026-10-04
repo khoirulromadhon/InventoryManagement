@@ -19,9 +19,9 @@ $(function(){
             $('#mutationsTable').html('<div class="alert alert-secondary">No history</div>');
             return;
         }
-        let html = '<table class="table table-striped"><thead><tr><th>ID</th><th>Good</th><th>Type</th><th>Amount</th><th>Note</th><th>Date</th></tr></thead><tbody>';
+        let html = '<table class="table table-striped"><thead><tr><th>Good</th><th>Type</th><th>Amount</th><th>Date</th></tr></thead><tbody>';
         items.forEach(i => {
-            html += `<tr><td>${i.mutationId ?? ''}</td><td>${i.goodName ?? ''}</td><td>${i.status ?? ''}</td><td>${i.amount ?? ''}</td><td>${i.mutationDate ?? ''}</td></tr>`;
+            html += `<tr><td>${i.goodName ?? ''}</td><td>${i.status ?? ''}</td><td>${i.amount ?? ''}</td><td>${i.mutationDate ?? ''}</td></tr>`;
         });
         html += '</tbody></table>';
         $('#mutationsTable').html(html);
@@ -33,7 +33,7 @@ $(function(){
             const sel = $('#mutationGoodIdSelect');
             sel.empty();
             sel.append('<option value="">-- Select Good --</option>');
-            data.forEach(g => sel.append(`<option value="${g.goodId}">${g.goodName} (${g.goodCode})</option>`));
+            data.forEach(g => sel.append(`<option value="${g.goodName}">${g.goodName} (${g.goodCode})</option>`));
         });
 
         // Categories
@@ -62,26 +62,31 @@ $(function(){
     });
 
     $('#saveMutation').on('click', function(){
-        const goodId = parseInt($('#mutationGoodIdSelect').val());
+        const goodName = $('#mutationGoodIdSelect').val();
         const categoryId = parseInt($('#mutationCategoryIdSelect').val());
         const supplierId = parseInt($('#mutationSupplierIdSelect').val());
         const type = $('#mutationTypeSelect').val();
         const amount = parseInt($('#mutationAmountInput').val());
 
         if (type == 'INBOUND') {
-            if (!goodId || !categoryId || !supplierId || !amount) {
+            if (!goodName || !categoryId || !supplierId || !amount) {
+                $('#mutationModalMsg').html('<div class="alert alert-warning">All fields required</div>');
+                return;
+            }
+        }
+        else if (type == 'OUTBOUND') {
+            if (!goodName || !categoryId || !supplierId || !amount) {
                 $('#mutationModalMsg').html('<div class="alert alert-warning">All fields required</div>');
                 return;
             }
         }
         else {
-            if (!goodId || !amount) {
-                $('#mutationModalMsg').html('<div class="alert alert-warning">All fields required</div>');
-                return;
-            }
+            $('#mutationModalMsg').html('<div class="alert alert-warning">Invalid mutation type</div>');
+            return;
         }
 
         const payload = {
+            GoodName: goodName,
             CategoryId: categoryId,
             SupplierId: supplierId,
             Status: type,
